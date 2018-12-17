@@ -16,12 +16,12 @@ export default function storageMiddleware({ dispatch }) {
       case CREATE_LOCK:
         storageService.storeLockDetails(action.lock)
         break
+      case ADD_LOCK:
+        break
       case UPDATE_LOCK:
         storageService.lockLookUp(action.address).then(results => {
           dispatch(setLockName(action.address, results.data.name))
         })
-        break
-      case ADD_LOCK:
         break
       case LOCK_DEPLOYED:
         storageService.updateLockDetails({
@@ -32,7 +32,6 @@ export default function storageMiddleware({ dispatch }) {
           dispatch(setLockName(action.address, results.data.name))
         })
       }
-
       next(action)
     }
   }

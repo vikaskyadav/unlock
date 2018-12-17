@@ -12,20 +12,12 @@ router.route('/lock').put(function (req, res, next) {
     let tempAddress = req.body.currentAddress;
 
     if (tempAddress && newAddress) {
-        Lock.update({ address: newAddress }, {
-            where: {
-                address: tempAddress
-            }
-        }).then(result => {
-            if (result[0] == 0) {
-                res.sendStatus(412)
-            } else {
-                res.send("updated")
-            }
-        })
-    } else {
-        res.sendStatus(200) 
+        Lock.findOne({ where: { address: tempAddress}, raw: true}).then( result => {
+            result.address = newAddress
+            Lock.create(result)
+        }).then( result => { res.sendStatus(200) })
     }
+    res.sendStatus(200) 
 }).post(function (req, res, next) {
     let lock = req.body
     if(lock.address && lock.name){
